@@ -1,0 +1,16 @@
+.git
+.github
+venv*/
+.venv/
+secrets/
+data/
+models/
+outputs/
+reports/
+raw/
+tests/
+*.csv
+*.keras
+*.joblib
+__pycache__/
+.pytest_cache/

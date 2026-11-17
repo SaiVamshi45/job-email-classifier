@@ -72,6 +72,20 @@ python scripts/run_pipeline.py --input-csv emails.csv --backend baseline
 
 Results go to `outputs/` (labels only, no email bodies).
 
+## Serve it and CI (all free)
+
+```bash
+pip install -r requirements-api.txt
+PYTHONPATH=src uvicorn jobtracker.api:app --port 8000      # Windows PowerShell: $env:PYTHONPATH="src"
+curl -X POST localhost:8000/classify -H "Content-Type: application/json" \
+  -d '{"emails":[{"subject":"Ihre Bewerbung","body":"leider müssen wir absagen","sender":"jobs@firma.de"}]}'
+```
+
+* `GET /health` says whether the models are loaded; `POST /classify` takes up to 50 mails and returns category, authenticity and intent with scores. It never logs mail content and never touches Gmail.
+* `JOBTRACKER_BACKEND=baseline|cnn|xlmr` picks the model (the baseline needs no TensorFlow). Set `JOBTRACKER_API_KEY` to require an `X-API-Key` header.
+* Docker: `docker build -t jobtracker-api .` then `docker run -p 8000:8000 -v "$PWD/models:/app/models:ro" jobtracker-api`. The models are mounted, not baked into the image, because they are derived from private mail.
+* CI: `.github/workflows/ci.yml` runs the tests and builds the image on every push. GitHub Actions is free for public repositories.
+
 ## Layout
 
 ```
