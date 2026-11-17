@@ -1,0 +1,170 @@
+{
+  "stage": "stage1",
+  "labels": [
+    "job_agency_spam",
+    "job_related",
+    "non_job",
+    "promotional"
+  ],
+  "split_sizes": {
+    "train": 3772,
+    "val": 943,
+    "test": 1180
+  },
+  "models": {
+    "cnn": {
+      "n": 1196,
+      "accuracy": 0.9147157190635451,
+      "macro_f1": 0.9029931264433998,
+      "per_class": {
+        "job_agency_spam": {
+          "precision": 0.9929906542056075,
+          "recall": 0.9770114942528736,
+          "f1-score": 0.984936268829664,
+          "support": 435.0
+        },
+        "job_related": {
+          "precision": 0.9559471365638766,
+          "recall": 0.857707509881423,
+          "f1-score": 0.9041666666666667,
+          "support": 253.0
+        },
+        "non_job": {
+          "precision": 0.791970802919708,
+          "recall": 0.9079497907949791,
+          "f1-score": 0.8460038986354775,
+          "support": 239.0
+        },
+        "promotional": {
+          "precision": 0.8801498127340824,
+          "recall": 0.8736059479553904,
+          "f1-score": 0.8768656716417911,
+          "support": 269.0
+        },
+        "accuracy": 0.9147157190635451,
+        "macro avg": {
+          "precision": 0.9052646016058187,
+          "recall": 0.9040686857211666,
+          "f1-score": 0.9029931264433998,
+          "support": 1196.0
+        },
+        "weighted avg": {
+          "precision": 0.9196044160981425,
+          "recall": 0.9147157190635451,
+          "f1-score": 0.9157803018838558,
+          "support": 1196.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          425,
+          5,
+          2,
+          3
+        ],
+        [
+          3,
+          217,
+          23,
+          10
+        ],
+        [
+          0,
+          3,
+          217,
+          19
+        ],
+        [
+          0,
+          2,
+          32,
+          235
+        ]
+      ],
+      "labels": [
+        "job_agency_spam",
+        "job_related",
+        "non_job",
+        "promotional"
+      ],
+      "macro_auc_ovr": 0.984201510277868
+    },
+    "baseline": {
+      "n": 1180,
+      "accuracy": 0.9101694915254237,
+      "macro_f1": 0.8981987899842191,
+      "per_class": {
+        "job_agency_spam": {
+          "precision": 0.9880382775119617,
+          "recall": 0.9763593380614657,
+          "f1-score": 0.9821640903686087,
+          "support": 423.0
+        },
+        "job_related": {
+          "precision": 0.9285714285714286,
+          "recall": 0.8911290322580645,
+          "f1-score": 0.9094650205761317,
+          "support": 248.0
+        },
+        "non_job": {
+          "precision": 0.8298755186721992,
+          "recall": 0.8333333333333334,
+          "f1-score": 0.8316008316008316,
+          "support": 240.0
+        },
+        "promotional": {
+          "precision": 0.8480565371024735,
+          "recall": 0.8921933085501859,
+          "f1-score": 0.8695652173913043,
+          "support": 269.0
+        },
+        "accuracy": 0.9101694915254237,
+        "macro avg": {
+          "precision": 0.8986354404645158,
+          "recall": 0.8982537530507624,
+          "f1-score": 0.8981987899842191,
+          "support": 1180.0
+        },
+        "weighted avg": {
+          "precision": 0.9114603717247179,
+          "recall": 0.9101694915254237,
+          "f1-score": 0.9105932020264937,
+          "support": 1180.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          413,
+          7,
+          1,
+          2
+        ],
+        [
+          5,
+          221,
+          15,
+          7
+        ],
+        [
+          0,
+          6,
+          200,
+          34
+        ],
+        [
+          0,
+          4,
+          25,
+          240
+        ]
+      ],
+      "labels": [
+        "job_agency_spam",
+        "job_related",
+        "non_job",
+        "promotional"
+      ],
+      "macro_auc_ovr": 0.9805791883973087
+    }
+  }
+}

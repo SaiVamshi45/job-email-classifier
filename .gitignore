@@ -1,0 +1,30 @@
+# Secrets: never commit these
+secrets/
+credentials*.json
+client_secret*.json
+token.json
+token.pickle
+*.pickle
+.env
+
+# Personal data and generated artefacts
+data/*.csv
+raw/
+outputs/
+models/
+reports/*.png
+*.h5
+*.keras
+*.joblib
+
+# Python / notebooks
+__pycache__/
+.ipynb_checkpoints/
+.pytest_cache/
+*.egg-info/
+.venv/
+desktop.ini
+
+venv312/
+venv/
+.venv/
