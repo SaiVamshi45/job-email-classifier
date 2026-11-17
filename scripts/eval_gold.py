@@ -15,6 +15,7 @@ from sklearn.metrics import accuracy_score, classification_report, f1_score
 
 from jobtracker import config
 from jobtracker import predictors as P
+from jobtracker import tracking
 from jobtracker.preprocess import build_model_text
 from jobtracker.rules import authenticity
 from jobtracker.weak_labels import weak_label_row
@@ -68,11 +69,15 @@ def main() -> None:
         p1 = [s1.labels[i] for i in s1.predict_proba(g["text"]).argmax(1)]
         print(f"[Stage 1] accuracy {accuracy_score(g.stage1, p1):.3f}  macro-F1 {f1_score(g.stage1, p1, average='macro'):.3f}")
         print(classification_report(g.stage1, p1, zero_division=0))
+        tracking.log_gold("stage1", backend, accuracy_score(g.stage1, p1), f1_score(g.stage1, p1, average="macro"),
+                          len(g), args.gold)
         s2 = P.load_predictor("stage2", backend)
         print(f"  stage2 labels {s2.labels}; mean top probability on gold {s2.predict_proba(gi['text']).max(1).mean():.4f}")
         p2 = [s2.labels[i] for i in s2.predict_proba(gi["text"]).argmax(1)]
         print(f"[Stage 2] accuracy {accuracy_score(gi.intent, p2):.3f}  macro-F1 {f1_score(gi.intent, p2, average='macro'):.3f}")
         print(classification_report(gi.intent, p2, zero_division=0))
+        tracking.log_gold("stage2", backend, accuracy_score(gi.intent, p2), f1_score(gi.intent, p2, average="macro"),
+                          len(gi), args.gold)
 
 
 if __name__ == "__main__":

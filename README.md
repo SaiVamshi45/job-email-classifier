@@ -49,28 +49,15 @@ The original data had duplicates, inconsistent label definitions and almost no m
 
 ## Results (honest numbers)
 
-Trained on the reviewed mailbox data (Stage 1: 5,895 rows, Stage 2: 634 rows; grouped splits so mails from one template never sit in both train and test). The gold set is 72 recent real mails that never enter training.
+Trained on the reviewed mailbox data. Grouped splits keep mails from one subject template together, and each template is capped at 12 mails per label (one DHL auto-reply alone had 54 near-identical copies and made up almost the whole acknowledgment class of the test set). After the cap: Stage 1 has 5,168 rows, Stage 2 has 568. The gold set is 72 recent real mails that never enter training.
 
 | | Held-out test | Gold (72 real mails) |
 |---|---|---|
-| Stage 1, TF-IDF + LogReg | 0.910 accuracy, 0.898 macro-F1 (1,180 mails) | 0.972 accuracy, 0.718 macro-F1 |
-| Stage 1, TextCNN | not retrained on the final data | 0.847 accuracy (older data) |
-| Stage 2, TF-IDF + LogReg | 0.542 accuracy, 0.553 macro-F1 (131 mails) | 0.641 accuracy |
-| Stage 2, TextCNN | 0.557 accuracy, 0.559 macro-F1 | 0.828 accuracy, 0.398 macro-F1 |
+| Stage 1, TF-IDF + LogReg | 0.908 accuracy, 0.903 macro-F1 (1,034 mails) | 0.958 accuracy, 0.613 macro-F1 |
+| Stage 2, TF-IDF + LogReg | 0.761 accuracy, 0.722 macro-F1 (117 mails) | 0.469 accuracy, 0.230 macro-F1 |
+| Stage 2, TextCNN | **0.889 accuracy, 0.832 macro-F1** (117 mails) | **0.844 accuracy**, 0.403 macro-F1 |
 
-Read these with care. About 41% of the Stage 1 labels come from the keyword labeller, so the held-out test partly measures agreement with it. The gold set has 50 of 64 intents as acknowledgment, 4 next steps and 1 interview, so Stage 2 is **not** reliable on `next_step` and `interview` (0 correct on gold) and its scores move by about 0.1 between retrains. The original 94.2% figure came from a split that leaked duplicates and should not be quoted.
-
-## Run
-
-```bash
-# Gmail: put your OAuth client file at secrets/credentials.json first (never commit it)
-python scripts/run_pipeline.py --gmail-query "after:2025/11/01" --backend cnn --fallback xlmr
-
-# or any CSV with Subject and "Email Text" columns
-python scripts/run_pipeline.py --input-csv emails.csv --backend baseline
-```
-
-Results go to `outputs/` (labels only, no email bodies).
+Read these with care. The gold texts are only subject + a 200-character snippet, while models train on up to 1,500 characters, so the short-input numbers (especially the TF-IDF baseline) are a lower bound. The gold set has 50 acknowledgments, 9 rejections, 4 next steps and 1 interview, so Stage 2 gets **none** of the `next_step` and `interview` mails right on gold and nothing can be claimed for those two classes yet. About 41% of the Stage 1 labels come from the keyword labeller, so its held-out test partly measures agreement with it. The original 94.2% figure came from a split that leaked duplicates and should not be quoted.
 
 ## Serve it and CI (all free)
 
@@ -85,6 +72,17 @@ curl -X POST localhost:8000/classify -H "Content-Type: application/json" \
 * `JOBTRACKER_BACKEND=baseline|cnn|xlmr` picks the model (the baseline needs no TensorFlow). Set `JOBTRACKER_API_KEY` to require an `X-API-Key` header.
 * Docker: `docker build -t jobtracker-api .` then `docker run -p 8000:8000 -v "$PWD/models:/app/models:ro" jobtracker-api`. The models are mounted, not baked into the image, because they are derived from private mail.
 * CI: `.github/workflows/ci.yml` runs the tests and builds the image on every push. GitHub Actions is free for public repositories.
+
+## Experiment tracking (MLflow, free and local)
+
+```bash
+pip install -r requirements-mlflow.txt
+python scripts/train.py --stage stage2 --backend baseline cnn      # each model becomes one tracked run
+python scripts/eval_gold.py --backend baseline cnn                 # gold-set scores are tracked too
+mlflow ui --backend-store-uri sqlite:///mlflow.db                  # then open http://127.0.0.1:5000
+```
+
+Each run stores the seed, data size, split sizes, class counts, test accuracy / macro-F1 / per-class F1 and the confusion-matrix picture, so you can compare runs over time. Only numbers and label names are logged, never email text or model files. Without MLflow installed, training works exactly as before.
 
 ## Layout
 

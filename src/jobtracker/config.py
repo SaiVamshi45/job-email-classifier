@@ -20,6 +20,7 @@ GMAIL_TOKEN = Path(os.environ.get("GMAIL_TOKEN", SECRETS_DIR / "token.json"))
 GMAIL_SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
 
 SEED = 42
+GROUP_CAP = 12   # max rows per subject template and label when training / testing (0 = no cap)
 
 # Mislabelled values found in the original data / results.
 LABEL_FIXES = {"non_nob": "non_job"}

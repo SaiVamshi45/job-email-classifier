@@ -28,3 +28,7 @@ desktop.ini
 venv312/
 venv/
 .venv/
+
+mlruns/
+mlartifacts/
+mlflow.db

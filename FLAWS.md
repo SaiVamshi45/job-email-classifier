@@ -46,6 +46,7 @@ Severity: **Critical** = wrong results or a security problem, **High** = mislead
 
 * Fetched 3,000 mails (Gmail quota errors fixed: retry with backoff, 30 s timeout, resumable cache) and reviewed them into the training files.
 * **Gold-set leakage found and closed.** The gold mails come from the same mailbox as the review queue, so nothing stopped them from entering training. `merge_reviewed.py` now excludes gold mails by id and subject template, and `remove_gold_from_training.py` removed 85 Stage 1 and 25 Stage 2 rows that had already been merged. After the cleanup the Stage 2 CNN moved from 0.859 to 0.828 on gold, so the earlier figure was probably a little optimistic.
+* **Near-duplicate templates dominated the test set.** One DHL auto-reply (54 copies) was 54 of the 55 acknowledgment rows in the Stage 2 test, so a model that had never seen it scored an acknowledgment F1 of about 0.03. Training and testing now cap each subject template at 12 mails per label (`GROUP_CAP`, `--group-cap`). Stage 2 CNN test macro-F1 went from 0.56 to 0.83 on a fairer split.
 * Final numbers are in the README. Stage 1 is usable. Stage 2 is still weak on `next_step` and `interview`.
 
 ## Still open (needs your input, not just code)

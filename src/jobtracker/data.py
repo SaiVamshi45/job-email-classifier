@@ -60,6 +60,16 @@ def load_stage(stage: str, path=None) -> pd.DataFrame:
     return df.dropna(subset=["text", "label"]).reset_index(drop=True)
 
 
+def cap_groups(df: pd.DataFrame, cap: int | None, seed: int = config.SEED) -> pd.DataFrame:
+    """Keep at most `cap` rows per (subject template, label). Automatic replies sent hundreds of times (for example
+    one DHL template for 54 applications) would otherwise make up most of a class and decide a whole test split."""
+    if not cap:
+        return df
+    shuffled = df.sample(frac=1.0, random_state=seed)
+    keep = shuffled.groupby(["group", "label"]).cumcount() < cap
+    return shuffled[keep].sort_index().reset_index(drop=True)
+
+
 def _one_fold(df: pd.DataFrame, seed: int, n_splits: int = 5):
     sgkf = StratifiedGroupKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     train_idx, held_idx = next(sgkf.split(df, df["label"], groups=df["group"]))

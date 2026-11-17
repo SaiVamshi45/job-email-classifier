@@ -204,3 +204,53 @@ def test_pipeline_end_to_end_with_stubs(tmp_path):
     saved = pd.read_csv(paths["all"])
     assert "preprocessed_text" not in saved.columns and "Email Text" not in saved.columns
     assert len(pd.read_csv(paths["applications"])) == 1 and len(pd.read_csv(paths["filtered"])) == 1
+
+
+# ---------------------------------------------------------------- gmail quota handling
+def test_rate_limit_403_is_retried(monkeypatch):
+    from googleapiclient.errors import HttpError
+
+    class Resp(dict):
+        status = 403
+        reason = "Forbidden"
+
+    err = HttpError(Resp(), b'{"error": {"errors": [{"reason": "rateLimitExceeded"}]}} Quota exceeded for quota metric')
+    assert gmail._is_rate_limit(err)
+
+    calls = {"n": 0}
+
+    class Exec:
+        def execute(self):
+            calls["n"] += 1
+            if calls["n"] < 3:
+                raise err
+            return {"id": "x"}
+
+    class Svc:
+        def users(self): return self
+        def messages(self): return self
+        def get(self, **kw): return Exec()
+
+    monkeypatch.setattr(gmail.time, "sleep", lambda s: None)
+    assert gmail._get_with_retry(Svc(), "x") == {"id": "x"} and calls["n"] == 3
+
+
+def test_other_403_is_not_retried():
+    from googleapiclient.errors import HttpError
+
+    class Resp(dict):
+        status = 403
+        reason = "Forbidden"
+
+    assert not gmail._is_rate_limit(HttpError(Resp(), b"Insufficient Permission"))
+
+
+def test_cap_groups_limits_each_template_and_label():
+    from jobtracker.data import cap_groups
+
+    df = pd.DataFrame({"group": ["a"] * 20 + ["b"] * 3 + ["a"] * 2, "label": ["x"] * 23 + ["y"] * 2,
+                       "text": [str(i) for i in range(25)]})
+    out = cap_groups(df, 5, seed=1)
+    counts = out.groupby(["group", "label"]).size().to_dict()
+    assert counts == {("a", "x"): 5, ("a", "y"): 2, ("b", "x"): 3}
+    assert len(cap_groups(df, 0)) == len(df)

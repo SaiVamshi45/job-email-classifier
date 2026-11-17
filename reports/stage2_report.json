@@ -7,155 +7,78 @@
     "rejection"
   ],
   "split_sizes": {
-    "train": 407,
-    "val": 96,
-    "test": 131
+    "train": 362,
+    "val": 89,
+    "test": 117
   },
   "models": {
     "cnn": {
-      "n": 131,
-      "accuracy": 0.5572519083969466,
-      "macro_f1": 0.5586206896551724,
+      "n": 117,
+      "accuracy": 0.8888888888888888,
+      "macro_f1": 0.8320808706257623,
       "per_class": {
         "acknowledgment": {
-          "precision": 0.3333333333333333,
-          "recall": 0.01818181818181818,
-          "f1-score": 0.034482758620689655,
-          "support": 55.0
-        },
-        "interview": {
-          "precision": 1.0,
-          "recall": 0.6,
-          "f1-score": 0.75,
-          "support": 5.0
-        },
-        "next_step": {
-          "precision": 0.75,
-          "recall": 0.75,
-          "f1-score": 0.75,
-          "support": 8.0
-        },
-        "rejection": {
-          "precision": 0.5384615384615384,
+          "precision": 0.7708333333333334,
           "recall": 1.0,
-          "f1-score": 0.7,
-          "support": 63.0
-        },
-        "accuracy": 0.5572519083969466,
-        "macro avg": {
-          "precision": 0.6554487179487178,
-          "recall": 0.5920454545454545,
-          "f1-score": 0.5586206896551724,
-          "support": 131.0
-        },
-        "weighted avg": {
-          "precision": 0.4828733607359561,
-          "recall": 0.5572519083969466,
-          "f1-score": 0.42554619636746505,
-          "support": 131.0
-        }
-      },
-      "confusion_matrix": [
-        [
-          1,
-          0,
-          0,
-          54
-        ],
-        [
-          0,
-          3,
-          2,
-          0
-        ],
-        [
-          2,
-          0,
-          6,
-          0
-        ],
-        [
-          0,
-          0,
-          0,
-          63
-        ]
-      ],
-      "labels": [
-        "acknowledgment",
-        "interview",
-        "next_step",
-        "rejection"
-      ],
-      "macro_auc_ovr": 0.7161939891683907
-    },
-    "baseline": {
-      "n": 131,
-      "accuracy": 0.5419847328244275,
-      "macro_f1": 0.5530651340996169,
-      "per_class": {
-        "acknowledgment": {
-          "precision": 0.3333333333333333,
-          "recall": 0.01818181818181818,
-          "f1-score": 0.034482758620689655,
-          "support": 55.0
+          "f1-score": 0.8705882352941177,
+          "support": 37.0
         },
         "interview": {
           "precision": 1.0,
-          "recall": 0.6,
-          "f1-score": 0.75,
-          "support": 5.0
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 12.0
         },
         "next_step": {
-          "precision": 0.75,
-          "recall": 0.75,
-          "f1-score": 0.75,
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1-score": 0.5454545454545454,
           "support": 8.0
         },
         "rejection": {
-          "precision": 0.5213675213675214,
-          "recall": 0.9682539682539683,
-          "f1-score": 0.6777777777777778,
-          "support": 63.0
+          "precision": 0.9629629629629629,
+          "recall": 0.8666666666666667,
+          "f1-score": 0.9122807017543859,
+          "support": 60.0
         },
-        "accuracy": 0.5419847328244275,
+        "accuracy": 0.8888888888888888,
         "macro avg": {
-          "precision": 0.6511752136752136,
-          "recall": 0.5841089466089466,
-          "f1-score": 0.5530651340996169,
-          "support": 131.0
+          "precision": 0.9334490740740741,
+          "recall": 0.8104166666666667,
+          "f1-score": 0.8320808706257623,
+          "support": 117.0
         },
         "weighted avg": {
-          "precision": 0.4746525738892151,
-          "recall": 0.5419847328244275,
-          "f1-score": 0.41485917346670176,
-          "support": 131.0
+          "precision": 0.9085351377018044,
+          "recall": 0.8888888888888888,
+          "f1-score": 0.8830106254254861,
+          "support": 117.0
         }
       },
       "confusion_matrix": [
         [
-          1,
+          37,
           0,
           0,
-          54
-        ],
-        [
-          0,
-          3,
-          2,
           0
         ],
         [
           0,
+          12,
           0,
-          6,
+          0
+        ],
+        [
+          3,
+          0,
+          3,
           2
         ],
         [
-          2,
+          8,
           0,
           0,
-          61
+          52
         ]
       ],
       "labels": [
@@ -164,7 +87,84 @@
         "next_step",
         "rejection"
       ],
-      "macro_auc_ovr": 0.9580973214741999
+      "macro_auc_ovr": 0.9773940828805628
+    },
+    "baseline": {
+      "n": 117,
+      "accuracy": 0.7606837606837606,
+      "macro_f1": 0.7215728715728715,
+      "per_class": {
+        "acknowledgment": {
+          "precision": 0.8461538461538461,
+          "recall": 0.5945945945945946,
+          "f1-score": 0.6984126984126984,
+          "support": 37.0
+        },
+        "interview": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 12.0
+        },
+        "next_step": {
+          "precision": 0.42857142857142855,
+          "recall": 0.375,
+          "f1-score": 0.4,
+          "support": 8.0
+        },
+        "rejection": {
+          "precision": 0.7222222222222222,
+          "recall": 0.8666666666666667,
+          "f1-score": 0.7878787878787878,
+          "support": 60.0
+        },
+        "accuracy": 0.7606837606837606,
+        "macro avg": {
+          "precision": 0.7492368742368742,
+          "recall": 0.7090653153153154,
+          "f1-score": 0.7215728715728715,
+          "support": 117.0
+        },
+        "weighted avg": {
+          "precision": 0.7698256159794622,
+          "recall": 0.7606837606837606,
+          "f1-score": 0.7548204881538215,
+          "support": 117.0
+        }
+      },
+      "confusion_matrix": [
+        [
+          22,
+          0,
+          0,
+          15
+        ],
+        [
+          0,
+          12,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          5
+        ],
+        [
+          4,
+          0,
+          4,
+          52
+        ]
+      ],
+      "labels": [
+        "acknowledgment",
+        "interview",
+        "next_step",
+        "rejection"
+      ],
+      "macro_auc_ovr": 0.9534348795318739
     }
   }
 }
