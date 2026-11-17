@@ -1,5 +1,7 @@
 # JobTracker: job-application email classifier
 
+![ci](https://github.com/Yasaswinid24/job-email-classifier/actions/workflows/ci.yml/badge.svg)
+
 Reads your Gmail (read-only) and sorts mail in three steps:
 
 1. **Stage 1**: category (`job_related`, `job_agency_spam`, `promotional`, `non_job`). CNN, with XLM-R as optional fallback when the CNN is unsure.
@@ -83,6 +85,14 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db                  # then open h
 ```
 
 Each run stores the seed, data size, split sizes, class counts, test accuracy / macro-F1 / per-class F1 and the confusion-matrix picture, so you can compare runs over time. Only numbers and label names are logged, never email text or model files. Without MLflow installed, training works exactly as before.
+
+![MLflow runs](docs/mlflow_runs.png)
+
+Runs after capping near-duplicate subject templates (Stage 1 and Stage 2 on the held-out test).
+
+![MLflow before and after the cap](docs/mlflow_before_after.png)
+
+Before and after capping: the older runs (about one hour earlier) used a Stage 2 test split in which one DHL auto-reply template made up 54 of the 55 acknowledgment rows, so their scores are not comparable with the newer runs.
 
 ## Layout
 
